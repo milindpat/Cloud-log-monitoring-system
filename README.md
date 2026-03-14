@@ -59,16 +59,34 @@ python log_monitor.py
 Stop monitoring by pressing:
 Ctrl + C
 
-## Example Screenshots
+## System Workflow
+
+1. The script continuously monitors the server log file.
+2. Failed login attempts are parsed using regular expressions.
+3. The system counts attempts per IP address.
+4. When the threshold is reached, an alert is generated.
+5. The alert is stored in log files and CSV reports.
+
+## System Demonstration
 
 ### Terminal Output
-![Terminal Output](screenshots/terminal_output.png)
+Shows the system detecting repeated failed login attempts and triggering an alert.
+<img src="screenshots/terminal_output.png" width="800">
+
+---
 
 ### Terminal Output (Multiple Attack Detection)
-![Terminal Output 2](screenshots/terminal_output_2.png)
+Demonstrates the system detecting attacks from multiple IP addresses and generating an attack summary.
+<img src="screenshots/terminal_output_2.png" width="800">
+
+---
 
 ### Alerts Log
-![Alerts Log](screenshots/alerts_file.png)
+Displays the timestamped alerts generated when the failed login threshold is exceeded.
+<img src="screenshots/alerts_file.png" width="800">
+
+---
 
 ### Attack Report CSV
-![Attack Report](screenshots/attack_report.png)
+Shows the CSV report storing detected attacks with the attacking IP address and number of failed attempts.
+<img src="screenshots/attack_report.png" width="800">
