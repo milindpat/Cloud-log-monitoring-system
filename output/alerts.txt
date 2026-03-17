@@ -1,0 +1,1 @@
+[2026-03-17 00:18:35] ALERT: 5 failed login attempts detected from IP 192.168.1.50

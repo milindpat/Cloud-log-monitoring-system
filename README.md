@@ -89,4 +89,5 @@ Displays the timestamped alerts generated when the failed login threshold is exc
 
 ### Attack Report CSV
 Shows the CSV report storing detected attacks with the attacking IP address and number of failed attempts.
+
 <img src="screenshots/attack_report.png" width="800">

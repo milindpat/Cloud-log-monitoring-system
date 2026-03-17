@@ -3,37 +3,54 @@ import time
 import csv
 from datetime import datetime
 from collections import defaultdict
+from pathlib import Path
 
-LOG_FILE = "server_log.txt"
+LOG_FILE = Path("data/server_log.txt")
+ALERT_FILE = Path("output/alerts.txt")
+ATTACK_REPORT_FILE = Path("output/attack_report.csv")
+SUSPICIOUS_IP_FILE = Path("data/suspicious_ips.txt")
 THRESHOLD = 5
 
 
 def extract_ip(line: str):
-    match = re.search(r'ip:(\d+\.\d+\.\d+\.\d+)', line)
+    match = re.search(r'ip:(\d+\.\d+\.\d+\.\d+)', line, re.IGNORECASE)
     return match.group(1) if match else None
+
+
+def initialize_attack_report():
+    if not ATTACK_REPORT_FILE.exists():
+        with open(ATTACK_REPORT_FILE, "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["IP Address", "Failed Attempts", "Timestamp"])
 
 
 def write_alert(message):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open("alerts.txt", "a") as file:
+    with open(ALERT_FILE, "a", encoding="utf-8") as file:
         file.write(f"[{timestamp}] {message}\n")
 
 
 def log_attack(ip, attempts):
-    with open("attack_report.csv", "a", newline="") as file:
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(ATTACK_REPORT_FILE, "a", newline="", encoding="utf-8") as file:
         writer = csv.writer(file)
-        writer.writerow([ip, attempts])
+        writer.writerow([ip, attempts, timestamp])
 
+def initialize_attack_report():
+    if not ATTACK_REPORT_FILE.exists():
+        with open(ATTACK_REPORT_FILE, "w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(["IP Address", "Failed Attempts", "Timestamp"])
 
 def save_suspicious_ip(ip):
     try:
-        with open("suspicious_ips.txt", "r") as file:
+        with open(SUSPICIOUS_IP_FILE, "r", encoding="utf-8") as file:
             existing_ips = {line.strip() for line in file}
     except FileNotFoundError:
         existing_ips = set()
 
     if ip not in existing_ips:
-        with open("suspicious_ips.txt", "a") as file:
+        with open(SUSPICIOUS_IP_FILE, "a", encoding="utf-8") as file:
             file.write(ip + "\n")
 
 
@@ -52,15 +69,17 @@ def print_attack_summary(failed_attempts, alerted_ips):
         print("Highest failed attempts: 0")
 
 
-def monitor_logs(log_file: str, threshold: int):
+def monitor_logs(log_file: Path, threshold: int):
     failed_attempts = defaultdict(int)
     alerted_ips = set()
 
     print("Real-Time Log Monitoring Started...")
     print("Watching for new failed login attempts...\n")
 
+    initialize_attack_report()
+
     try:
-        with open(log_file, "r") as file:
+        with open(log_file, "r", encoding="utf-8") as file:
             file.seek(0, 2)
 
             while True:
@@ -73,7 +92,7 @@ def monitor_logs(log_file: str, threshold: int):
                 line = line.strip()
                 print(f"New log entry: {line}")
 
-                if "LOGIN FAILED" in line:
+                if "login failed" in line.lower():
                     ip = extract_ip(line)
 
                     if ip:
@@ -89,8 +108,9 @@ def monitor_logs(log_file: str, threshold: int):
                             write_alert(alert_message)
                             log_attack(ip, failed_attempts[ip])
                             save_suspicious_ip(ip)
-
                             alerted_ips.add(ip)
+                    else:
+                        print("Warning: failed login detected but no valid IP found.")
 
     except FileNotFoundError:
         print(f"Error: log file '{log_file}' not found.")
