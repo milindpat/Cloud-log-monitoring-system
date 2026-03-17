@@ -49,7 +49,7 @@ When multiple failed login attempts are detected from the same IP address, the s
 New log entry: 2026-03-14 10:01:13 LOGIN FAILED user:root ip:192.168.1.77
 Failed login count for 192.168.1.77: 5
 ALERT: 5 failed login attempts detected from IP 192.168.1.77
-
+```
 ## Output Files
 
 ### output/alerts.txt
@@ -81,11 +81,13 @@ Clone the repository:
 ```
 git clone https://github.com/milindpat/cloud-log-monitoring-system.git
 cd cloud-log-monitoring-system
+```
 Then run:
+```
 python src/log_monitor.py
+```
 Stop monitoring by pressing:
 Ctrl + C
-
 ## System Workflow
 
 1. The script continuously monitors the server log file.
