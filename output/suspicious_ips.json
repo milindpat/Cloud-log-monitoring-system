@@ -1,0 +1,7 @@
+{
+    "suspicious_ips": [
+        "192.168.1.10"
+    ],
+    "total_suspicious_ips": 1,
+    "generated_at": "2026-03-28 16:24:46"
+}

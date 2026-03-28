@@ -1,0 +1,7 @@
+Attack Summary
+--------------
+Total suspicious IPs detected: 1
+Total failed login attempts: 5
+Most aggressive IP: 192.168.1.10
+Highest failed attempts from one IP: 5
+Generated at: 2026-03-28 16:24:46
