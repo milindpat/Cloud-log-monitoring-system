@@ -135,8 +135,16 @@ Then run:
 ```
 python src/log_monitor.py --log data/server_log.txt --threshold 5
 ```
+Arguments:
+
+- `--log` specifies the log file to monitor
+- `--threshold` defines how many failed login attempts trigger an alert
+
 Stop monitoring by pressing:
+
+```
 Ctrl + C
+```
 ## System Workflow
 
 1. The script continuously monitors the server log file.
